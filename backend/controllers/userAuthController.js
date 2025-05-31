@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../../models/User";
 import bcrypt from 'bcryptjs'
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
@@ -45,6 +45,10 @@ export const registerUser = async (req, res) => {
 }
 
 export const loginUser = async (req, res) => {
+   const errors=validationResult(req);
+    if(!errors.isEmpty()){
+      return res.status(400).json({ errors:errors.array() });
+    }
   try {
     const { email, password } = req.body;
 
@@ -104,7 +108,7 @@ export const logoutUser = (req, res) => {
 };
 
 
-export const authMiddleware=async(req, res, next) =>{
+export const userAuthMiddleware=async(req, res, next) =>{
   const token = req.cookies.token || req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) return res.status(401).json({ message: 'Access denied. No token.' });
@@ -121,3 +125,4 @@ export const authMiddleware=async(req, res, next) =>{
     res.status(400).json({ message: 'Invalid token.' });
   }
 }
+

@@ -1,7 +1,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import { body } from 'express-validator';
-import { registerUser, loginUser, logoutUser,authMiddleware } from '../controllers/authController.js';
+import { registerUser, loginUser, logoutUser,userAuthMiddleware } from '../controllers/userAuthController.js';
 
 const router = express.Router();
 
@@ -19,9 +19,9 @@ const validateLogin = [
 router.post('/register', validateRegister, registerUser);
 router.post('/login', validateLogin, loginUser);
 router.post('/logout', logoutUser);
-app.get('/profile', authMiddleware, async (req, res) => {
+app.get('/profile', userAuthMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user._id).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.json(user);
