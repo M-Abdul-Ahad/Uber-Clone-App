@@ -1,10 +1,15 @@
 import User from "../models/User";
 import bcrypt from 'bcryptjs'
 import jwt from "jsonwebtoken";
+import { validationResult } from "express-validator";
 
 export const blacklistedTokens = new Set();
 
 export const registerUser = async (req, res) => {
+    const errors=validationResult(req);
+    if(!errors.isEmpty()){
+      return res.status(400).json({ errors:errors.array() });
+    }
     try{
     const {name,email,password}=req.body;
     if (!name || !email || !password) {
@@ -21,7 +26,7 @@ export const registerUser = async (req, res) => {
         password:hashedPassword
     })
     await newUser.save()
-    const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET,{expiresIn:'1d'});
+    const token=jwt.sign({_id:newUser._id},process.env.JWT_SECRET,{expiresIn:'1d'});
 
     res.status(201).json({
         message:'User registered Successfully',
