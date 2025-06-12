@@ -1,4 +1,4 @@
-import { loginCaptain,logoutCaptain,registerCaptain,authCaptainMiddleware } from "../controllers/captainAuthController";
+import { loginCaptain,logoutCaptain,registerCaptain,authCaptainMiddleware } from "../controllers/captainAuthController.js";
 import express from 'express';
 import { body } from 'express-validator';
 import Captain from '../models/Captain.js';

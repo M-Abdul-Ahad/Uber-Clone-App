@@ -1,4 +1,4 @@
-import Captain from '../models/Captain';
+import Captain from '../models/Captain.js';
 import bcrypt from 'bcryptjs'
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";

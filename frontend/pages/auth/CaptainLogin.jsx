@@ -1,20 +1,35 @@
 import React, { useState } from 'react';
 import { FaCarSide } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const CaptainLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Implement captain login logic here
-    console.log('Captain logging in:', { email, password });
+    try {
+      const response = await axios.post(
+        'http://localhost:4000/api/captains/login',
+        { email, password },
+        { withCredentials: true }
+      );
+      localStorage.setItem('token', response.data.token);
+      console.log('Captain login successful');
+      navigate('/captain-dashboard');
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        alert(error.response.data.message);
+      } else {
+        alert('Login failed');
+      }
+    }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-white">
-      {/* Decorative SVG for city/road at the bottom */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <svg
           viewBox="0 0 1440 320"

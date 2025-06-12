@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Home = () => {
+const Start = () => {
   return (
     <div className="fixed inset-0 text-white overflow-hidden">
       {/* Hero Section */}
@@ -64,4 +64,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Start;

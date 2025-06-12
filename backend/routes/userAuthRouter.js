@@ -19,7 +19,7 @@ const validateLogin = [
 router.post('/register', validateRegister, registerUser);
 router.post('/login', validateLogin, loginUser);
 router.post('/logout', logoutUser);
-app.get('/profile', userAuthMiddleware, async (req, res) => {
+router.get('/profile', userAuthMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });

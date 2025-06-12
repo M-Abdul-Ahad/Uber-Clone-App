@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaCarSide } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const vehicleTypes = ['car', 'bike', 'truck'];
 
@@ -12,13 +13,38 @@ const CaptainRegister = () => {
   const [color, setColor] = useState('');
   const [plate, setPlate] = useState('');
   const [vehicleType, setVehicleType] = useState(vehicleTypes[0]);
+  const navigate=useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Implement registration logic here
-    console.log('Registering captain:', {
-      name, email, password, vehicle: { model, color, plate, vehicleType }
-    });
+    try {
+      const response = await axios.post(
+        'http://localhost:4000/api/captains/register',
+        {
+          name,
+          email,
+          password,
+          status: 'inactive', 
+          vehicle: {
+            model,
+            color,
+            plate,
+            vehicleType,
+          },
+        },
+        { withCredentials: true }
+      );
+
+      localStorage.setItem('token', response.data.token);
+      console.log('Captain registered successfully');
+      navigate('/captain-login')
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        alert(error.response.data.message);
+      } else {
+        alert('Registration failed');
+      }
+    }
   };
 
   return (

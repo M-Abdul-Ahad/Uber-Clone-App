@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 import { FaCarSide } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { data, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 const UserRegister = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate=useNavigate()
 
-  const handleRegister = (e) => {
+  const handleRegister =async (e) => {
     e.preventDefault();
-    console.log('Registering user:', { name, email, password });
+    try{
+      const response=await axios.post('http://localhost:4000/api/users/register',{
+        name,
+        email,
+        password
+      });
+      console.log('User registered Successfully')
+      navigate('/user-login')
+      localStorage.setItem('token',response.data.token)
+    }catch(e){
+      console.log('registration error',e)
+    }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-white">
-      {/* Decorative SVG for city/road at the bottom */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <svg
           viewBox="0 0 1440 320"
